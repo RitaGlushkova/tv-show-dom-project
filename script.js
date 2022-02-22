@@ -1,35 +1,54 @@
 //You can edit ALL of the code here
-const allEpisodes = getAllEpisodes();
+let arrayOfEpisodes = getAllEpisodes();
 let mainEl = document.querySelector("main");
+let searchBar = document.querySelector("#searchInput");
+let displayNumberOfEpisodes = document.querySelector("#displayEpisodesText");
 
+//search bar
+searchBar.addEventListener("keyup", (e) => {
+  const searchString = e.target.value.toLowerCase();
+  const filteredEpisodes = arrayOfEpisodes.filter((episode) => {
+    return (
+      episode.summary.toLowerCase().includes(searchString) ||
+      episodeName(episode).toLowerCase().includes(searchString)
+    );
+  });
+  loadEpisodes(filteredEpisodes);
+  displayNumberOfEpisodes.innerText = `Displaying ${filteredEpisodes.length}/${arrayOfEpisodes.length} episodes`
+});
+
+//Formatting name of an episode
 function episodeName(obj) {
   let title = obj.name;
   let seasonNumber = obj.season < 10 ? `0${obj.season}` : `${obj.season}`;
   let episodeNumber = obj.number < 10 ? `0${obj.number}` : `${obj.number}`;
   return `${title} - S${seasonNumber}E${episodeNumber}`;
 }
+
 //add all episodes to the page
-for (i = 0; i < allEpisodes.length; i++) {
-  let episodeBox = document.createElement("div");
-  episodeBox.id = allEpisodes[i].id;
-  episodeBox.classList.add("episodeBox");
-  let h2Box = document.createElement("div");
-  let h2El = document.createElement("h2");
-  h2Box.classList.add("h2BoxStyle");
-  h2El.innerText = episodeName(allEpisodes[i]);
-  h2Box.appendChild(h2El);
-  episodeBox.appendChild(h2Box);
-  let imageBox = document.createElement("div");
-  let img = document.createElement("img");
-  img.src = allEpisodes[i].image.medium;
-  imageBox.appendChild(img);
-  episodeBox.appendChild(imageBox);
-  let descriptionEl = document.createElement("p");
-  descriptionEl.classList.add("episodeDescription");
-  descriptionEl.innerText = allEpisodes[i].summary.replaceAll("<p>", "").replaceAll("</p>", "").replaceAll("<br>", "");
-  episodeBox.appendChild(descriptionEl);
-  mainEl.appendChild(episodeBox);
+function loadEpisodes(Episodes) {
+  const htmlString = Episodes.map((episode) => {
+    return `
+    <div id=${episode.id} class="episodeBox">
+      <div>
+        <h2 class="h2BoxStyle">${episodeName(episode)}</h2>
+      </div>
+      <div>
+        <img src=${episode.image.medium}>
+      </div>
+      <p class="episodeDescription">${episode.summary
+        .replaceAll("<p>", "")
+        .replaceAll("</p>", "")
+        .replaceAll("<br>", "")}
+      </p>
+    </div>`;
+  }).join("");
+  mainEl.innerHTML = htmlString;
 }
+
+//default page display
+loadEpisodes(arrayOfEpisodes);
+displayNumberOfEpisodes.innerText = `Displaying ${arrayOfEpisodes.length} episodes`;
 
 /*{
     id: 4952,
