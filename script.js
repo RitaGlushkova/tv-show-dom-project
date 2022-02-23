@@ -11,7 +11,7 @@ searchBar.addEventListener("keyup", (e) => {
   const filteredEpisodes = arrayOfEpisodes.filter((episode) => {
     return (
       episode.summary.toLowerCase().includes(searchString) ||
-      episodeName(episode).toLowerCase().includes(searchString) ||
+      episodeCode(episode).toLowerCase().includes(searchString) ||
       episode.name.toLowerCase().includes(searchString)
     );
   });
