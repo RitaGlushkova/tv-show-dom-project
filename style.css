@@ -18,8 +18,10 @@ main {
   padding: 25px;
 }
 .h2BoxStyle {
-  width: 75%;
+  width: 80%;
   text-align: center;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .grid {

@@ -3,6 +3,7 @@ let arrayOfEpisodes = getAllEpisodes();
 let mainEl = document.querySelector("main");
 let searchBar = document.querySelector("#searchInput");
 let displayNumberOfEpisodes = document.querySelector("#displayEpisodesText");
+let selectEl = document.querySelector("#selectMenu");
 
 //search bar
 searchBar.addEventListener("keyup", (e) => {
@@ -10,20 +11,46 @@ searchBar.addEventListener("keyup", (e) => {
   const filteredEpisodes = arrayOfEpisodes.filter((episode) => {
     return (
       episode.summary.toLowerCase().includes(searchString) ||
-      episodeName(episode).toLowerCase().includes(searchString)
+      episodeName(episode).toLowerCase().includes(searchString) ||
+      episode.name.toLowerCase().includes(searchString)
     );
   });
   loadEpisodes(filteredEpisodes);
-  displayNumberOfEpisodes.innerText = `Displaying ${filteredEpisodes.length}/${arrayOfEpisodes.length} episodes`
+  displayNumberOfEpisodes.innerText = `Displaying ${filteredEpisodes.length}/${arrayOfEpisodes.length} episodes`;
+  selectMenu(filteredEpisodes);
+});
+
+//add functionality to select menu
+selectEl.addEventListener("change", (e) => {
+  window.location = `#${e.target.value}`;
+  let allEpisodes = document.getElementsByClassName("episodeBox");
+  let highlightedEl = document.getElementById(e.target.value);
+  highlightedEl.style.border = "solid";
+  for (let i = 0; i < allEpisodes.length; i++) {
+    if (allEpisodes[i] !== highlightedEl) {
+      allEpisodes[i].style.border = null;
+    }
+  }
 });
 
 //Formatting name of an episode
-function episodeName(obj) {
-  let title = obj.name;
+function episodeCode(obj) {
   let seasonNumber = obj.season < 10 ? `0${obj.season}` : `${obj.season}`;
   let episodeNumber = obj.number < 10 ? `0${obj.number}` : `${obj.number}`;
-  return `${title} - S${seasonNumber}E${episodeNumber}`;
+  return `S${seasonNumber}E${episodeNumber}`;
 }
+
+//add options in select menu
+const selectMenu = (Episodes) => {
+  const select = Episodes.map((episode) => {
+    return `
+    <option value="${episode.id}">   
+      ${episodeCode(episode)} - ${episode.name}
+    </option>;
+`;
+  }).join("");
+  selectEl.innerHTML = select;
+};
 
 //add all episodes to the page
 function loadEpisodes(Episodes) {
@@ -31,7 +58,7 @@ function loadEpisodes(Episodes) {
     return `
     <div id=${episode.id} class="episodeBox">
       <div>
-        <h2 class="h2BoxStyle">${episodeName(episode)}</h2>
+        <h2 class="h2BoxStyle">${episode.name} - ${episodeCode(episode)}</h2>
       </div>
       <div>
         <img src=${episode.image.medium}>
@@ -48,7 +75,8 @@ function loadEpisodes(Episodes) {
 
 //default page display
 loadEpisodes(arrayOfEpisodes);
-displayNumberOfEpisodes.innerText = `Displaying ${arrayOfEpisodes.length} episodes`;
+displayNumberOfEpisodes.innerText = `Displaying ${arrayOfEpisodes.length}/${arrayOfEpisodes.length} episodes`;
+selectMenu(arrayOfEpisodes);
 
 /*{
     id: 4952,
