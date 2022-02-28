@@ -3,15 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TV Show Project | My Name (My GitHub username)</title>
+    <title>TV Show Project | Margarita Glushkova (RitaGlushkova)</title>
     <link href="style.css" rel="stylesheet" />
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   </head>
 
   <body id="root">
-     <header class="header-flex">
+    <header class="header-flex">
       <h1 class="pad">TV SHOW PROJECT</h1>
-      <select name="selectMenu" id="selectMenu"></select>
+      <select name="selectMenu" id="selectMenu">
+      </select>
       <div id="inputBox" class="pad">
         <input
           type="text"
@@ -20,9 +21,18 @@
           placeholder="Search episodes"
         />
       </div>
+
+      <div id="displayEpisodesBox" class="pad">
+        <p id="displayEpisodesText"></p>
+      </div>
     </header>
-    <main>
-    </main>
+    <main class="grid"></main>
+    <footer>
+      <p class="pad">
+        The data has originally come from
+        <a href="https://www.tvmaze.com/">TVMaze.com</a>.
+      </p>
+    </footer>
     <!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
     <script src="episodes.js"></script>
 
