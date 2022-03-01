@@ -52,26 +52,40 @@ const selectMenu = (Episodes) => {
   });
 };
 
-//add all episodes to the page
-function loadEpisodes(Episodes) {
-  const htmlString = Episodes.map((episode) => {
-    return `
-    <div id=${episode.id} class="episodeBox">
-      <div>
-        <h2 class="h2BoxStyle">${episode.name} - ${episodeCode(episode)}</h2>
-      </div>
-      <div>
-        <img src=${episode.image.medium}>
-      </div>
-      <p class="episodeDescription">${episode.summary
-        .replaceAll("<p>", "")
-        .replaceAll("</p>", "")
-        .replaceAll("<br>", "")}
-      </p>
-    </div>`;
-  }).join("");
-  mainEl.innerHTML = htmlString;
-  displayNumberOfEpisodes.innerText = `Displaying ${Episodes.length}/${arrayOfEpisodes.length} episodes`;
+function createdEpisodeElement(episode) {
+  let episodeBox = document.createElement("li");
+  episodeBox.id = episode.id;
+  episodeBox.classList.add("episodeBox");
+  let h2Box = document.createElement("div");
+  let h2El = document.createElement("h2");
+  h2Box.classList.add("h2BoxStyle");
+  h2El.innerText = `${episode.name} - ${episodeCode(episode)}`;
+  h2Box.appendChild(h2El);
+  episodeBox.appendChild(h2Box);
+  let imageBox = document.createElement("div");
+  let img = document.createElement("img");
+  img.src = episode.image.medium;
+  imageBox.appendChild(img);
+  episodeBox.appendChild(imageBox);
+  let descriptionEl = document.createElement("p");
+  descriptionEl.classList.add("episodeDescription");
+  descriptionEl.innerText = episode.summary
+    .replaceAll("<p>", "")
+    .replaceAll("</p>", "")
+    .replaceAll("<br>", "");
+  episodeBox.appendChild(descriptionEl);
+  return episodeBox;
+}
+
+function loadEpisodes(episodes) {
+  let episodeList = document.createElement("ul");
+  episodeList.classList.add("grid");
+  episodes.forEach((episode) =>
+    episodeList.appendChild(createdEpisodeElement(episode))
+  );
+  mainEl.innerHTML = "";
+  mainEl.appendChild(episodeList);
+  displayNumberOfEpisodes.innerText = `Displaying ${episodes.length}/${arrayOfEpisodes.length} episodes`;
 }
 
 //default page display

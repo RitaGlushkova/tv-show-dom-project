@@ -20,9 +20,8 @@
   //     .replaceAll("</p>", "")
   //     .replaceAll("<br>", "");
   //   episodeBox.appendChild(descriptionEl);
-  //   mainEl.appendChild(episodeBox);
   // }
-
+ mainEl.appendChild(episodeBox);
   //  window.location = `#${e.target.value}`;
   //  let allEpisodes = document.getElementsByClassName("episodeBox");
   //  let highlightedEl = document.getElementById(e.target.value);
@@ -44,4 +43,22 @@
   //    }).join("");
   //    selectEl.innerHTML = select;
 
-  
+  //   const htmlString = Episodes.map((episode) => {
+//     return `
+//     <div id=${episode.id} class="episodeBox">
+//       <div>
+//         <h2 class="h2BoxStyle">${episode.name} - ${episodeCode(episode)}</h2>
+//       </div>
+//       <div>
+//         <img src=${episode.image.medium}>
+//       </div>
+//       <p class="episodeDescription">${episode.summary
+//         .replaceAll("<p>", "")
+//         .replaceAll("</p>", "")
+//         .replaceAll("<br>", "")}
+//       </p>
+//     </div>`;
+//   }).join("");
+//   mainEl.innerHTML = htmlString;
+//   displayNumberOfEpisodes.innerText = `Displaying ${Episodes.length}/${arrayOfEpisodes.length} episodes`;
+// }
