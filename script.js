@@ -1,5 +1,5 @@
 //You can edit ALL of the code here
-let arrayOfEpisodes = getAllEpisodes();
+let arrayOfEpisodes;
 let mainEl = document.querySelector("main");
 let searchBar = document.querySelector("#searchInput");
 let displayNumberOfEpisodes = document.querySelector("#displayEpisodesText");
@@ -75,8 +75,18 @@ function loadEpisodes(Episodes) {
 }
 
 //default page display
-loadEpisodes(arrayOfEpisodes);
-selectMenu(arrayOfEpisodes);
+const getAllEpisodesFromAPI = async () =>
+  fetch("https://api.tvmaze.com/shows/82/episodes")
+    .then((response) => response.json())
+    .then((data) => data)
+    .catch((err) => console.log(err));
+
+const setup = async () => {
+  arrayOfEpisodes = await getAllEpisodesFromAPI();
+  loadEpisodes(arrayOfEpisodes);
+  selectMenu(arrayOfEpisodes);
+};
+window.onload = setup;
 
 /*{
     id: 4952,
