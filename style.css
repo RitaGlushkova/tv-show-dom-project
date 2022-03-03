@@ -44,7 +44,6 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-height: 550px;
   padding: 25px;
 }
 

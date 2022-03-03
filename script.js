@@ -1,9 +1,12 @@
 //You can edit ALL of the code here
+let allShows;
+let showID = 82;
 let arrayOfEpisodes;
-let mainEl = document.querySelector("main");
-let searchBar = document.querySelector("#searchInput");
-let displayNumberOfEpisodes = document.querySelector("#displayEpisodesText");
-let selectEl = document.querySelector("#selectMenu");
+const mainEl = document.querySelector("main");
+const searchBar = document.querySelector("#searchInput");
+const displayNumberOfEpisodes = document.querySelector("#displayEpisodesText");
+const selectEl = document.querySelector("#selectMenu");
+const selectShowEl = document.querySelector("#selectShow");
 
 //search bar
 searchBar.addEventListener("keyup", (e) => {
@@ -16,13 +19,54 @@ searchBar.addEventListener("keyup", (e) => {
     );
   });
   loadEpisodes(filteredEpisodes);
-  selectMenu(filteredEpisodes);
+  createSelectMenu(filteredEpisodes);
 });
 
-//add functionality to select menu
+//Formatting name of an episode
+const episodeCode = (obj) => {
+  const seasonNumber = String(obj.season).padStart(2, 0);
+  const episodeNumber = String(obj.number).padStart(2, 0);
+  return `S${seasonNumber}E${episodeNumber}`;
+};
+
+//Select menu for shows
+const defaultSelectShows = () => {
+  const defaultSelectShow = document.createElement("option");
+  defaultSelectShow.value = 82;
+  defaultSelectShow.innerText = "Select show";
+  selectShowEl.appendChild(defaultSelectShow);
+};
+
+const createSelectShows = (shows) => {
+  shows.map((show) => {
+    const selectOptShow = document.createElement("option");
+    selectOptShow.value = `${show.id}`;
+    selectOptShow.innerText = `${show.name}`;
+    selectShowEl.appendChild(selectOptShow);
+  });
+};
+selectShowEl.addEventListener("change", (e) => changeShow(e.target.value));
+
+//Select menu for episodes
+const defaultSelectEpisodes = () => {
+  const defaultSelectOption = document.createElement("option");
+  defaultSelectOption.value = "";
+  defaultSelectOption.innerText = "Select episode";
+  selectEl.appendChild(defaultSelectOption);
+};
+
+const createSelectEpisodes = (Episodes) => {
+  Episodes.map((episode) => {
+    const selectOptionEl = document.createElement("option");
+    selectOptionEl.value = `${episode.id}`;
+    selectOptionEl.innerText = `${episodeCode(episode)} - ${episode.name}`;
+    selectEl.appendChild(selectOptionEl);
+  });
+};
+
 selectEl.addEventListener("change", (e) => {
-  let idSelectedEpisode = e.target.value;
-  let selectedEpisode = arrayOfEpisodes.filter((el) => {
+  const idSelectedEpisode = e.target.value;
+  const selectedEpisode = arrayOfEpisodes.filter((el) => {
     return el.id == idSelectedEpisode;
   });
   !idSelectedEpisode
@@ -30,44 +74,24 @@ selectEl.addEventListener("change", (e) => {
     : loadEpisodes(selectedEpisode);
 });
 
-//Formatting name of an episode
-function episodeCode(obj) {
-  let seasonNumber = String(obj.season).padStart(2, 0);
-  let episodeNumber = String(obj.number).padStart(2, 0);
-  return `S${seasonNumber}E${episodeNumber}`;
-}
-
-//add options in select menu
-
-let defaultSelectOption = document.createElement("option");
-defaultSelectOption.value = "";
-defaultSelectOption.innerText = "Select episode";
-selectEl.appendChild(defaultSelectOption);
-const selectMenu = (Episodes) => {
-  Episodes.map((episode) => {
-    let selectOptionEl = document.createElement("option");
-    selectOptionEl.value = `${episode.id}`;
-    selectOptionEl.innerText = `${episodeCode(episode)} - ${episode.name}`;
-    selectEl.appendChild(selectOptionEl);
-  });
-};
-
-function createdEpisodeElement(episode) {
-  let episodeBox = document.createElement("li");
+//creating episode
+const createEpisodeElement = (episode) => {
+  const episodeBox = document.createElement("li");
   episodeBox.id = episode.id;
   episodeBox.classList.add("episodeBox");
-  let h2Box = document.createElement("div");
-  let h2El = document.createElement("h2");
+  const h2Box = document.createElement("div");
+  const h2El = document.createElement("h2");
   h2Box.classList.add("h2BoxStyle");
   h2El.innerText = `${episode.name} - ${episodeCode(episode)}`;
   h2Box.appendChild(h2El);
   episodeBox.appendChild(h2Box);
-  let imageBox = document.createElement("div");
-  let img = document.createElement("img");
-  img.src = episode.image.medium;
+  const imageBox = document.createElement("div");
+  const img = document.createElement("img");
+  if (episode.image === null) img.src = "/img/not_found.jpg";
+  else img.src = episode.image.medium;
   imageBox.appendChild(img);
   episodeBox.appendChild(imageBox);
-  let descriptionEl = document.createElement("p");
+  const descriptionEl = document.createElement("p");
   descriptionEl.classList.add("episodeDescription");
   descriptionEl.innerText = episode.summary
     .replaceAll("<p>", "")
@@ -75,31 +99,45 @@ function createdEpisodeElement(episode) {
     .replaceAll("<br>", "");
   episodeBox.appendChild(descriptionEl);
   return episodeBox;
-}
+};
 
-function loadEpisodes(episodes) {
-  let episodeList = document.createElement("ul");
+//rendering all episodes on the page
+const loadEpisodes = (episodes) => {
+  const episodeList = document.createElement("ul");
   episodeList.classList.add("grid");
   episodes.forEach((episode) =>
-    episodeList.appendChild(createdEpisodeElement(episode))
+    episodeList.appendChild(createEpisodeElement(episode))
   );
   mainEl.innerHTML = "";
   mainEl.appendChild(episodeList);
   displayNumberOfEpisodes.innerText = `Displaying ${episodes.length}/${arrayOfEpisodes.length} episodes`;
-}
+};
 
-//default page display
-const getAllEpisodesFromAPI = async () =>
-  fetch("https://api.tvmaze.com/shows/82/episodes")
+//Load API for episodes
+const getAllEpisodesFromAPI = async (showID) =>
+  fetch(`https://api.tvmaze.com/shows/${showID}/episodes`)
     .then((response) => response.json())
     .then((data) => data)
     .catch((err) => console.log(err));
 
-const setup = async () => {
-  arrayOfEpisodes = await getAllEpisodesFromAPI();
+const changeShow = async (showID) => {
+  selectEl.innerHTML = "";
+  defaultSelectEpisodes();
+  arrayOfEpisodes = await getAllEpisodesFromAPI(showID);
   loadEpisodes(arrayOfEpisodes);
-  selectMenu(arrayOfEpisodes);
+  createSelectEpisodes(arrayOfEpisodes);
 };
+
+//default page load
+const setup = async () => {
+  arrayOfEpisodes = await getAllEpisodesFromAPI(showID);
+  allShows = getAllShows();
+  loadEpisodes(arrayOfEpisodes);
+  defaultSelectShows();
+  defaultSelectEpisodes();
+  createSelectShows(allShows);
+};
+
 window.onload = setup;
 
 /*{
