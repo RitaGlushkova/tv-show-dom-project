@@ -11,7 +11,9 @@ const selectShowEl = document.querySelector("#selectShow");
 const allShowsBtn = document.querySelector("#allShowsBtn");
 const allEpisodesBtn = document.querySelector("#allEpisodesBtn");
 
-allShowsBtn.addEventListener("click", () => setup());
+allShowsBtn.addEventListener("click", () => {
+  searchShows.value = "";
+  setup()});
 
 const createdShowElement = (show) => {
   const showBox = document.createElement("li");
@@ -51,6 +53,7 @@ const createdShowElement = (show) => {
   showBox.addEventListener("click", () => {
     changeShow(showBox.id);
     selectShowEl.value = showBox.id;
+    searchShows.value="";
   });
   return showBox;
 };
@@ -204,17 +207,18 @@ const changeShow = (showID) => {
   selectEl.innerHTML = "";
   getAllEpisodesFromAPI(showID);
   allEpisodesBtn.addEventListener("click", () => {
+    searchBar.value= "";
     getAllEpisodesFromAPI(showID);
   });
 };
 
 //default page load
 const setup = () => {
+  selectShowEl.innerHTML="";
   allShows = getAllShows();
   renderAllShowsOnPage(allShows);
   createSelectShows(allShows);
   createSearchShows();
-  
 };
 
 window.onload = setup;
