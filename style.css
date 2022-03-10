@@ -14,7 +14,7 @@ ul {
   background-color: #fffaf0;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-around;
   /* z-index: 5;
   position: fixed;
   top: 0;
@@ -29,8 +29,11 @@ main {
   min-height: 1000px;
   /* margin-top: 130px; */
 }
-.pad {
-  padding: 25px;
+
+input {
+  padding: 18px 25px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 .h2BoxStyle {
   width: 80%;
@@ -98,6 +101,17 @@ footer p {
 footer {
   margin: 0;
   background-color: #fffaf0;
+}
+button {
+  background-color: #f3eee2;
+  border: none;
+  margin: 10px;
+  border-radius: 4px;
+  padding: 18px 24px;
+font-size: 1rem;
+}
+#displayEpisodesText {
+  font-size: 1.3rem;
 }
 
 .select-dropdown,

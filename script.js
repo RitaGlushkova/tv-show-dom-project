@@ -1,11 +1,17 @@
 let allShows;
 let arrayOfEpisodes;
 const mainEl = document.querySelector("main");
+const divSelectShowEl = document.querySelector("#divSelectShow");
+const divSelectMenuEl = document.querySelector("#divSelectMenu");
 const searchBar = document.querySelector("#searchInput");
 const searchShows = document.querySelector("#searchBarShows");
 const displayNumberOfEpisodes = document.querySelector("#displayEpisodesText");
 const selectEl = document.querySelector("#selectMenu");
 const selectShowEl = document.querySelector("#selectShow");
+const allShowsBtn = document.querySelector("#allShowsBtn");
+const allEpisodesBtn = document.querySelector("#allEpisodesBtn");
+
+allShowsBtn.addEventListener("click", () => setup());
 
 const createdShowElement = (show) => {
   const showBox = document.createElement("li");
@@ -58,21 +64,11 @@ renderAllShowsOnPage = (shows) => {
   displayNumberOfEpisodes.innerText = `Displaying ${shows.length}/${allShows.length} shows`;
 };
 
-//Select menu for shows
-// const defaultSelectShows = () => {
-//   searchBar.style.display = "none";
-//   selectEl.style.display = "none";
-//   const defaultSelectShow = document.createElement("option");
-//   defaultSelectShow.innerText = "All shows";
-//   defaultSelectShow.value = "all";
-//   selectShowEl.appendChild(defaultSelectShow);
-// };
-
 const createSelectShows = (shows) => {
   searchBar.style.display = "none";
-  selectEl.style.display = "none";
+  divSelectMenuEl.style.display = "none";
   const defaultSelectShow = document.createElement("option");
-  defaultSelectShow.innerText = "All shows";
+  defaultSelectShow.innerText = "Select Shows";
   defaultSelectShow.value = "all";
   selectShowEl.appendChild(defaultSelectShow);
   shows.map((show) => {
@@ -81,7 +77,7 @@ const createSelectShows = (shows) => {
     selectOptShow.innerText = `${show.name}`;
     selectShowEl.appendChild(selectOptShow);
   });
-};;
+};
 
 selectShowEl.addEventListener("change", (e) => {
   if (e.target.value === "all") setup();
@@ -89,6 +85,7 @@ selectShowEl.addEventListener("change", (e) => {
 });
 
 const createSearchShows = () => {
+  allEpisodesBtn.style.display = "none";
   searchShows.style.display = "block";
   searchShows.addEventListener("keyup", (e) => {
     const searchString = e.target.value.toLowerCase().trim();
@@ -103,8 +100,9 @@ const createSearchShows = () => {
   });
 };
 
-//search bar
+//search bar Episodes
 const createSearchEpisodes = () => {
+  allEpisodesBtn.style.display = "block";
   searchShows.style.display = "none";
   searchBar.style.display = "block";
   searchBar.addEventListener("input", (e) => {
@@ -130,7 +128,7 @@ const episodeCode = (obj) => {
 
 //Select menu for episodes
 const createSelectEpisodes = (Episodes) => {
-  selectEl.style.display = "block";
+  divSelectMenuEl.style.display = "block";
   selectEl.innerHTML = "";
   const defaultSelectOption = document.createElement("option");
   defaultSelectOption.value = "";
@@ -205,6 +203,9 @@ const getAllEpisodesFromAPI = (showID) =>
 const changeShow = (showID) => {
   selectEl.innerHTML = "";
   getAllEpisodesFromAPI(showID);
+  allEpisodesBtn.addEventListener("click", () => {
+    getAllEpisodesFromAPI(showID);
+  });
 };
 
 //default page load
@@ -213,6 +214,7 @@ const setup = () => {
   renderAllShowsOnPage(allShows);
   createSelectShows(allShows);
   createSearchShows();
+  
 };
 
 window.onload = setup;

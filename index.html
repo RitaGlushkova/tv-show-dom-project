@@ -11,33 +11,32 @@
   <body id="root">
     <header class="header-flex">
       <h1 class="pad">TV SHOW PROJECT</h1>
-      <div class="select-dropdown">
-      <select name="selectShow" id="selectShow"></select> 
+      <div class="select-dropdown" id="divSelectShow">
+        <select name="selectShow" id="selectShow"></select>
       </div>
-       <div class="select-dropdown">
-        <select name="selectMenu" id="selectMenu"></select> 
-       </div>
-       
-      <div id="searchShowBox" class="pad">
-        <input
-          type="text"
-          id="searchBarShows"
-          name="searchInputShows"
-          placeholder="Search shows"
-        />
+      <div class="select-dropdown" id="divSelectMenu">
+        <select name="selectMenu" id="selectMenu"></select>
       </div>
-      <div id="inputBox" class="pad">
-        <input
-          type="text"
-          id="searchInput"
-          name="searchInput"
-          placeholder="Search episodes"
-        />
-      </div>
+
+      <input
+        type="text"
+        id="searchBarShows"
+        name="searchInputShows"
+        placeholder="Search shows"
+      />
+
+      <input
+        type="text"
+        id="searchInput"
+        name="searchInput"
+        placeholder="Search episodes"
+      />
 
       <div id="displayEpisodesBox" class="pad">
         <p id="displayEpisodesText"></p>
       </div>
+      <button id="allShowsBtn">All Shows</button>
+      <button id="allEpisodesBtn">All Episodes</button>
     </header>
     <main></main>
     <footer>
